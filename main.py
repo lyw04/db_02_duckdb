@@ -39,10 +39,11 @@ def main(page: ft.Page):
         if filter_query:
             query = """
                 SELECT * FROM assets 
-                WHERE name ILIKE ? 
+                WHERE name ILIKE ?
+                OR ticker ILIKE ?
             """
             search_str = f'%{filter_query}%'
-            return con.execute(query, [search_str,]).df()
+            return con.execute(query, [search_str, search_str,]).df()
         else:
             return con.execute("SELECT * FROM assets").df()
 
@@ -95,9 +96,9 @@ def main(page: ft.Page):
     # 필터 입력
     filter_input = ft.Container(
         ft.TextField(
-            label="종목 검색",
+            label="종목 또는 티커 검색",
             prefix_icon=ft.Icons.SEARCH,
-            hint_text="종목명을 입력하세요",
+            hint_text="종목명이나 티커를 입력하세요",
             hint_style=ft.TextStyle(color=ft.Colors.GREY_700),
             expand=True,
             on_change=on_filter_change,
@@ -110,6 +111,7 @@ def main(page: ft.Page):
         ft.Divider(),
         scrollable_data
     )
+
 
 if __name__ == "__main__":
     ft.run(main)
