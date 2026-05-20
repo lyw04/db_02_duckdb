@@ -37,11 +37,12 @@ def main(page: ft.Page):
 
     def get_data(filter_query=""):
         if filter_query:
-            query = f"""
+            query = """
                 SELECT * FROM assets 
-                WHERE name ILIKE '%{filter_query}%' 
+                WHERE name ILIKE ? 
             """
-            return con.execute(query).df()
+            search_str = f'%{filter_query}%'
+            return con.execute(query, [search_str,]).df()
         else:
             return con.execute("SELECT * FROM assets").df()
 
@@ -109,7 +110,6 @@ def main(page: ft.Page):
         ft.Divider(),
         scrollable_data
     )
-
 
 if __name__ == "__main__":
     ft.run(main)
